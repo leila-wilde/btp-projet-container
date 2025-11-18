@@ -1,0 +1,122 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+venv/
+env/
+ENV/
+
+# Go
+*.o
+*.a
+*.so
+.DS_Store
+dist/
+vendor/
+go.sum
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Docker
+docker-compose.override.yml
+.docker/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+database/
+data/
+
+# Temporary files
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build output
+dist/
+build/
+*.egg-info/
+
+# IDE
+.vscode
+.idea
+*.code-workspace
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# API documentation
+docs/swagger.json
+
+# Logs
+logs/
+*.log
+
+# Sensitive files
+.secrets
+secrets.yml
+secrets.json
+
+# Local development
+local/
+tmp/
+temp/
