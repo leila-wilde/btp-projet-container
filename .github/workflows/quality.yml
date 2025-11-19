@@ -1,0 +1,59 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  quality-checks:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Run GoFmt
+        run: |
+          fmt_files=$(gofmt -l ./src)
+          if [ -n "$fmt_files" ]; then
+            echo "❌ Go files not formatted:"
+            echo "$fmt_files"
+            exit 1
+          fi
+          echo "✅ All Go files properly formatted"
+
+      - name: Run Go Vet
+        run: go vet ./...
+        working-directory: ./src
+
+      - name: Check for security issues (gosec)
+        run: |
+          go install github.com/securego/gosec/v2/cmd/gosec@latest
+          gosec ./...
+        working-directory: ./src
+        continue-on-error: true
+
+  docker-lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          continue-on-error: true
+
+      - name: Lint docker-compose.yml
+        run: |
+          docker-compose config > /dev/null && echo "✅ docker-compose.yml is valid" || exit 1
+        continue-on-error: true
