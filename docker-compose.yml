@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  # MySQL Database Service
+  # MySQL database service
   db:
     image: mysql:8.0
     container_name: inframusic-db
@@ -24,7 +24,7 @@ services:
       retries: 5
     restart: unless-stopped
 
-  # Go-Fiber API Service
+  # Go-Fiber API service
   api:
     build:
       context: .
@@ -47,7 +47,7 @@ services:
       - app-network
     restart: unless-stopped
 
-  # Adminer - Database Administration Tool
+  # Adminer - database administration tool
   adminer:
     image: adminer:latest
     container_name: inframusic-adminer

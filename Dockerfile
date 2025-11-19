@@ -11,7 +11,7 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o api .
 
-# Final stage
+# final stage
 FROM alpine:latest
 
 RUN apk --no-cache add ca-certificates curl
