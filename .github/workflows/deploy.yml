@@ -1,0 +1,69 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_run:
+    workflows: ["CI/CD Pipeline"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker images
+        run: docker-compose build
+
+      - name: Start containers
+        run: docker-compose up -d
+
+      - name: Verify API is running
+        run: |
+          echo "Waiting for API to respond..."
+          for i in {1..30}; do
+            if curl -f http://localhost:8080/health 2>/dev/null; then
+              echo "✅ API is running"
+              exit 0
+            fi
+            echo "Attempt $i..."
+            sleep 2
+          done
+          echo "❌ API failed to start"
+          docker-compose logs
+          exit 1
+
+      - name: Health check on endpoints
+        run: |
+          echo "Checking API endpoints..."
+          curl -v http://localhost:8080/api/tracks || true
+          curl -v http://localhost:8080/api/artists || true
+
+      - name: Check Swagger documentation
+        run: |
+          echo "Verifying Swagger UI..."
+          curl -f http://localhost:8080/docs || true
+
+      - name: Stop containers
+        if: always()
+        run: docker-compose down
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: always()
+    
+    steps:
+      - name: Deployment status
+        run: |
+          if [ "${{ needs.deploy.result }}" == "success" ]; then
+            echo "✅ Deployment successful"
+          else
+            echo "❌ Deployment failed"
+            exit 1
+          fi
