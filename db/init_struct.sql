@@ -33,8 +33,6 @@ CREATE TABLE tracks (
 
 CREATE TABLE genres (
     genre_id INT NOT NULL,
-    name VARCHAR(255)
+    name VARCHAR(255),
     CONSTRAINT PK_genre PRIMARY KEY (genre_id)
 );
-
-/* Create foreign key
