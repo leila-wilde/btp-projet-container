@@ -1,15 +1,21 @@
 # Dockerfile for Go-Fiber API
 
-FROM golang:1.21-alpine AS builder
+FROM golang:1.22-alpine AS builder
 
 WORKDIR /build
 
-COPY go.mod go.sum ./
+# Copy only go.mod first to cache module download step
+COPY go.mod ./
 RUN go mod download
 
+# Copy the rest of the project
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o api .
+# Ensure module files are tidy so go.sum is generated
+RUN go mod tidy
+
+# Build the Go binary from the `src` directory
+RUN CGO_ENABLED=0 GOOS=linux go build -o api ./src
 
 # final stage
 FROM alpine:latest
