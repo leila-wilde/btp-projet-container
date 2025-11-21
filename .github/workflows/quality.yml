@@ -17,7 +17,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
+          go-version: '1.22.2'
 
       - name: Run GoFmt
         run: |
@@ -38,7 +38,6 @@ jobs:
           go install github.com/securego/gosec/v2/cmd/gosec@latest
           gosec ./...
         working-directory: ./src
-        continue-on-error: true
 
   docker-lint:
     runs-on: ubuntu-latest
